@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+{% block title %}Табло | Clinfo{% endblock %}
+{% block content %}
+<div class="header">
+  <div>
+    <h2>Здравей, {{ user.full_name }}</h2>
+    <div class="totals">
+      <span class="pill">Общо фактури: {{ "%.2f"|format(total_invoices) }} лв.</span>
+      <span class="pill">Общо задължения: {{ "%.2f"|format(total_debts) }} лв.</span>
+    </div>
+  </div>
+  <a class="btn" href="{{ url_for('logout') }}">Изход</a>
+</div>
+
+<div class="row">
+  <div class="card">
+    <h3>Фактури</h3>
+    <table>
+      <thead>
+        <tr><th>№</th><th>Дата</th><th>Сума</th><th>Статус</th></tr>
+      </thead>
+      <tbody>
+      {% for item in invoices %}
+        <tr>
+          <td>{{ item.invoice_no }}</td>
+          <td>{{ item.date }}</td>
+          <td>{{ item.amount }} лв.</td>
+          <td>{{ item.status }}</td>
+        </tr>
+      {% else %}
+        <tr><td colspan="4">Няма фактури.</td></tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <div class="card">
+    <h3>Стокови наличности</h3>
+    <table>
+      <thead>
+        <tr><th>Артикул</th><th>Количество</th><th>Ед.</th></tr>
+      </thead>
+      <tbody>
+      {% for item in stocks %}
+        <tr>
+          <td>{{ item.item_name }}</td>
+          <td>{{ item.quantity }}</td>
+          <td>{{ item.unit }}</td>
+        </tr>
+      {% else %}
+        <tr><td colspan="3">Няма наличности.</td></tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <div class="card">
+    <h3>Задължения</h3>
+    <table>
+      <thead>
+        <tr><th>Описание</th><th>Падеж</th><th>Сума</th><th>Статус</th></tr>
+      </thead>
+      <tbody>
+      {% for item in debts %}
+        <tr>
+          <td>{{ item.description }}</td>
+          <td>{{ item.due_date or '-' }}</td>
+          <td>{{ item.amount }} лв.</td>
+          <td>{{ item.state }}</td>
+        </tr>
+      {% else %}
+        <tr><td colspan="4">Няма задължения.</td></tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}
